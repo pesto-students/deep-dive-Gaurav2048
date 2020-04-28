@@ -18,8 +18,11 @@
     background-color: rgba(255, 255, 255, 1);
     border-radius: 10px;
     box-shadow: 5px 10px #888888;
+    overflow: hidden;
     min-width: 35%;
 }
+
+.modal::-webkit-scrollbar{ width :0px; }
 
 .modal-drop {
     font-size: 15px;
@@ -29,6 +32,8 @@
     background-color: white;
     float: right;
     margin-top: 8px;
+    cursor: pointer;
+    background-color: transparent;
     margin-right: 16px;
     top: 0;
 
@@ -51,5 +56,13 @@
 }
 
 .modal-body {
-    padding: 16px;
+    margin-left: 16px;
+    margin-top: 16px;
+    margin-right: 16px;
+    margin-bottom: 0px;
+    padding: 0 0;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    overflow-x: hidden;
 }
