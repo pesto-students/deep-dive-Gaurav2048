@@ -15,13 +15,26 @@ const App = () => {
 
   return (
     <div >
-      <button onClick={handleClick} > show modal </button>
+      <button onClick={handleClick}  > show modal </button>
       {
         showModal ?
           <Dummy  
+            title={"Title"}
             onModalClosed  = {onModalClosed}
+            corner = {8}
+            backgroundColor = {"#f00"}
+            titleColor = {"#fff"}
+            titleSize = {28}
           >
-            <h1>Test one</h1>
+
+            <h1>Text On</h1>
+            <input placeholder="input counted" id="one" />
+            <input placeholder="input counted" />
+            <h4>oka</h4>
+            <input placeholder="input counted" />
+            <input placeholder="input counted" />
+            <input placeholder="input counted" />
+            <button>tess</button>
           </Dummy> :
           null
       }
