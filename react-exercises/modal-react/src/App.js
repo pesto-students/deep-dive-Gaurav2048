@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Login from './components/Login/Login';
-import Registration from "./components/Registration/Registration";
+import Login from './pages/login/login';
+import Registration from "./pages/registration/registration";
 const App = () => {
 
   const [showLogin, set] = useState(false)

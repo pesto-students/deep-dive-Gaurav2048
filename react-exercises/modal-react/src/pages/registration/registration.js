@@ -1,5 +1,5 @@
-import React from "react";
-import Modal from "../Modal";
+import React from "./node_modules/react";
+import Modal from "../../components/modal/modal";
 import './style.css';
 
 const Registration = (props) => {
