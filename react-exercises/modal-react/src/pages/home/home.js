@@ -3,7 +3,7 @@ import Login from './login/login';
 import Registration from './signup/signup';
 import './home.css';
 
-const Homepage = ({ setIsLoggedIn }) => {
+const Homepage = (props) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
 
@@ -23,24 +23,24 @@ const Homepage = ({ setIsLoggedIn }) => {
 
   return (
     <div className="container">
-          <h1 style={{textAlign:'center'}}>Home</h1>
-          <button
-            className="btn"
-            type="button"
-            onClick={handleLoginClick}
-          >
-            Sign in
+      <h1 style={{ textAlign: 'center' }}>Home</h1>
+      <button
+        className="btn"
+        type="button"
+        onClick={handleLoginClick}
+      >
+        Sign in
           </button>
-          <button
-            className="btn"
-            type="button"
-            onClick={handleRegisterClick}
-          >
-            Sign up
+      <button
+        className="btn"
+        type="button"
+        onClick={handleRegisterClick}
+      >
+        Sign up
           </button>
 
-      {showLoginModal && <Login onModalClosed={onModalClosed} setIsLoggedIn={setIsLoggedIn} />}
-      {showSignupModal && <Registration onModalClosed={onModalClosed} setIsLoggedIn={setIsLoggedIn} />}
+      {showLoginModal && <Login onModalClosed={onModalClosed} />}
+      {showSignupModal && <Registration onModalClosed={onModalClosed} />}
     </div>
   );
 };

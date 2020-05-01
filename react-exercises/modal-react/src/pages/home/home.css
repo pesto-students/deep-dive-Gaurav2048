@@ -1,16 +1,16 @@
 
 .container {
   position: absolute;
-  
   color: white;
   top: 35%;
   left: 50%;
+  margin-top: 5%;
   transform: translate(-50%, -50%);
   background: rgba(40, 75, 99, 0.8);
   background-size: cover;
   border-radius: 5px;
-  height: 50%;
-  width: 50%;
+  height: 90%;
+  width: 90%;
 }
 
 button {
@@ -23,7 +23,7 @@ button {
   border-radius: 5px;
   padding: 10px;
   color: white;
-  width: 60%;
+  width: 51%;
   font-family: "Noto Sans", sans-serif;
   font-size: 14px;
   cursor: pointer;
