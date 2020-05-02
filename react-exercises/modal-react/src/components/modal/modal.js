@@ -4,12 +4,11 @@ import './style.css'
 
 export default function Modal(props) {
 
-  // const [childCountOnFocus,set] = useState(-1)
-
   useEffect(() => {
     window.addEventListener('keydown', handleKeyEvents);
 
     function handleKeyEvents(event) {
+      console.log("Dddjhdjhkfhdkfhdkfhjdkhfdkfjdkfdk")
       if (event.keyCode === 27) { // escape
         handleEscKey(event)
       } else if (event.keyCode === 9) {// for tab
@@ -61,34 +60,21 @@ export default function Modal(props) {
       return currentFocus;
     }
 
-    // auto focus the first input. 
-    for (const el of props.children) {
-      if (el.type === "input") {
-        const id = el.props.id
-        document.getElementById(id).focus()
-        break
+    // auto focus the first input.
+    if (props.children != null && typeof props.children[Symbol.iterator] === 'function') {
+      for (const el of props.children) {
+        if (el.type === "input") {
+          const id = el.props.id
+          if (document.getElementById(id)) { document.getElementById(id).focus() }
+          break
+        }
       }
     }
-
   })
-
-  // empty array -
-  //If you want to run an effect and clean it up only once (on mount and unmount),
-  // you can pass an empty array ([]) as a second argument.
-  // This tells React that your effect doesn’t depend on any values from props or state,
-  // so it never needs to re-run
-  // optimise by adding variables which we need to watch for changes
-
-
-  // const shiftFocus = () => {
-  //   if (childCountOnFocus !== props.children.length) {
-
-  //   }
-  // }
 
   const styles = {
     modal: {
-      borderRadius: props.corner ? `${props.corner}px` : "0px",
+      borderRadius: props.borderRadius ? `${props.borderRadius}px` : "0px",
       backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff"
     },
     title: {
@@ -97,17 +83,16 @@ export default function Modal(props) {
     }
   }
 
-
   return (
     <div className="modal-area" >
       <div id="modal" className="modal" style={styles.modal} >
         <div className="modal-header" >
-          <div className="modal-title" style={styles.title} > {props.title !== null ? props.title : "Purpose"} </div>
+          <div className="modal-title" style={styles.title} > {props.title !== null ? props.title : "Modal"} </div>
           <button className="modal-drop" onClick={() => props.onModalClosed()} >X</button>
         </div>
 
         <div className="modal-body" >
-          {props.children}
+          {props.children ? props.children : ''}
         </div>
       </div>
     </div>
