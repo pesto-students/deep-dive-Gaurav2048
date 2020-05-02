@@ -4,12 +4,11 @@ import './style.css'
 
 export default function Modal(props) {
 
-  // const [childCountOnFocus,set] = useState(-1)
-
   useEffect(() => {
     window.addEventListener('keydown', handleKeyEvents);
 
     function handleKeyEvents(event) {
+      console.log("Dddjhdjhkfhdkfhdkfhjdkhfdkfjdkfdk")
       if (event.keyCode === 27) { // escape
         handleEscKey(event)
       } else if (event.keyCode === 9) {// for tab
@@ -61,16 +60,18 @@ export default function Modal(props) {
       return currentFocus;
     }
 
-    // auto focus the first input. 
-    for (const el of props.children) {
-      if (el.type === "input") {
-        const id = el.props.id
-        document.getElementById(id).focus()
-        break
+    // auto focus the first input.
+    if (props.children != null && typeof props.children[Symbol.iterator] === 'function') {
+      for (const el of props.children) {
+        if (el.type === "input") {
+          const id = el.props.id
+          if (document.getElementById(id)) { document.getElementById(id).focus() }
+          break
+        }
       }
     }
-
   })
+
   const styles = {
     modal: {
       borderRadius: props.borderRadius ? `${props.borderRadius}px` : "0px",
@@ -82,7 +83,6 @@ export default function Modal(props) {
     }
   }
 
-
   return (
     <div className="modal-area" >
       <div id="modal" className="modal" style={styles.modal} >
@@ -92,7 +92,7 @@ export default function Modal(props) {
         </div>
 
         <div className="modal-body" >
-          {props.children}
+          {props.children ? props.children : ''}
         </div>
       </div>
     </div>
