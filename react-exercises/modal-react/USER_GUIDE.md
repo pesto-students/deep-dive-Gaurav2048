@@ -12,7 +12,7 @@ To give overview of react-modal , we have bundled Demo App.
 
 
 #  You can pass below props with Modal    
-                                        Default     
+                                         
  - onModalClosed={props.onModalClosed}                required
  - title                                'Modal'       optional
  - borderRadius                         0px           optional
