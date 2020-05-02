@@ -11,16 +11,14 @@ To give overview of react-modal , we have bundled Demo.
  2. Run `npm run start` 
 
 
-##  You can pass below props with Modal   
-
-| Property        | Default       | Is Required
-| -------------   | ------------- |
-| onModalClosed   |               | required
-| title           | 'Modal'       | optional
-| borderRadius    |  0px          | optional
-| backgroundColor |  #fff         | optional
-| titleColor      |  #000         | optional
-| titleSize       |  16px         | optional
+##  You can pass below props with Modal    
+                                         
+ - onModalClosed                                      required
+ - title                                'Modal'       optional
+ - borderRadius                         0px           optional
+ - backgroundColor                      #fff          optional
+ - titleColor                           #000          optional
+ - titleSize                            16px          optional
  
  
  ## Future implementations
