@@ -7,7 +7,7 @@ const Registration = (props) => {
   return <Modal
     title={"REGISTRATION"}
     onModalClosed={props.onModalClosed}
-    corner={8}
+    borderRadius={8}
     backgroundColor={"#fff"}
     titleColor={"#000"}
     titleSize={28}
