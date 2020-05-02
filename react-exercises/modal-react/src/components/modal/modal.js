@@ -71,24 +71,9 @@ export default function Modal(props) {
     }
 
   })
-
-  // empty array -
-  //If you want to run an effect and clean it up only once (on mount and unmount),
-  // you can pass an empty array ([]) as a second argument.
-  // This tells React that your effect doesn’t depend on any values from props or state,
-  // so it never needs to re-run
-  // optimise by adding variables which we need to watch for changes
-
-
-  // const shiftFocus = () => {
-  //   if (childCountOnFocus !== props.children.length) {
-
-  //   }
-  // }
-
   const styles = {
     modal: {
-      borderRadius: props.corner ? `${props.corner}px` : "0px",
+      borderRadius: props.borderRadius ? `${props.borderRadius}px` : "0px",
       backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff"
     },
     title: {
@@ -102,7 +87,7 @@ export default function Modal(props) {
     <div className="modal-area" >
       <div id="modal" className="modal" style={styles.modal} >
         <div className="modal-header" >
-          <div className="modal-title" style={styles.title} > {props.title !== null ? props.title : "Purpose"} </div>
+          <div className="modal-title" style={styles.title} > {props.title !== null ? props.title : "Modal"} </div>
           <button className="modal-drop" onClick={() => props.onModalClosed()} >X</button>
         </div>
 

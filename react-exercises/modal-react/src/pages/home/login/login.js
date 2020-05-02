@@ -7,7 +7,7 @@ const Login = (props) => {
   return <Modal
     onModalClosed={props.onModalClosed}
     title={"LOGIN"}
-    corner={8}
+    borderRadius={8}
     backgroundColor={"#fff"}
     titleColor={"#000"}
     titleSize={28}
