@@ -31,14 +31,12 @@ To give overview of react-modal , we have bundled Demo.
    - onOpened
 
 
-
-<<<<<<< HEAD
 ## Requirements achieved 
   - [x] Tab , Escape handled as per aria-practices
   - [x] The Modal component should be re-usable and a module that can be shared.
   - [x] You component should be able to render multiple modals by calling the component     multiple times.
   - [x] It should have a defined input interface and a defined output.
-  - [x]You need to design an API letting the user override in-built functionalities as they please.
+  - [x] You need to design an API letting the user override in-built functionalities as they please.
   - [x] All the over-ridable APIs need to have sensible defaults.
   - [x] Make a small application where you import your modal.
   - [x] Create login and signup forms.
@@ -52,7 +50,3 @@ To give overview of react-modal , we have bundled Demo.
 
 ## You are welcome to contribute and give suggestions 
 ## To watch for development work , have a look at our project board - https://github.com/pesto-students/deep-dive-Gaurav2048/projects/1
-=======
-# You are welcome to contribute and give suggestions 
-# To watch for development work , have a look at our project board - https://github.com/pesto-students/deep-dive-Gaurav2048/projects/1
->>>>>>> 60ad64b159938d2a7f1d0a2708b6c3023e386a9a
