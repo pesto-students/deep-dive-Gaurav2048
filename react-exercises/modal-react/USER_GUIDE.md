@@ -12,7 +12,7 @@ To give overview of react-modal , we have bundled Demo.
 
 
 ##  You can pass below props with Modal    
-                                        Default     
+                                         
  - onModalClosed={props.onModalClosed}                required
  - title                                'Modal'       optional
  - borderRadius                         0px           optional
@@ -32,6 +32,7 @@ To give overview of react-modal , we have bundled Demo.
 
 
 
+<<<<<<< HEAD
 ## Requirements achieved 
   - [x] Tab , Escape handled as per aria-practices
   - [x] The Modal component should be re-usable and a module that can be shared.
@@ -51,3 +52,7 @@ To give overview of react-modal , we have bundled Demo.
 
 ## You are welcome to contribute and give suggestions 
 ## To watch for development work , have a look at our project board - https://github.com/pesto-students/deep-dive-Gaurav2048/projects/1
+=======
+# You are welcome to contribute and give suggestions 
+# To watch for development work , have a look at our project board - https://github.com/pesto-students/deep-dive-Gaurav2048/projects/1
+>>>>>>> 60ad64b159938d2a7f1d0a2708b6c3023e386a9a
