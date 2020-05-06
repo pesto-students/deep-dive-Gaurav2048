@@ -9,13 +9,10 @@ function Parse(file, {
     providedHeader = null,
 
 }) {
-    let fileStream 
-    try {
-      fileStream = fs.createReadStream(file)
-    } catch (error) {
-        throw Error('file path not valid')
-    }
+    if(!fs.existsSync(file)) throw Error('No file found.')
 
+    let fileStream  = fs.createReadStream(file)
+    
     const rl = readline.createInterface({
         input: fileStream,
         crlfDelay: Infinity
@@ -76,7 +73,9 @@ function Parse(file, {
                 index++;
             }
         }
-        return arrayOutput;
+        return {
+            arrayOutput, errorOutput
+        };
     }
 
     async function toArrayStream(cb) {
@@ -113,6 +112,7 @@ function Parse(file, {
     }
 
 }
+
 
 
 module.exports = {
