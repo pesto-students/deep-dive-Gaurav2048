@@ -44,8 +44,19 @@ const isComment = line =>{
     return false; 
 }
 
+const parseObjectToCSV = obj =>{
+    let csvString = ""
+
+    for(const el of Object.keys(obj)){
+        csvString = csvString + obj[el] +","
+    }
+
+    return csvString.substring(0, csvString.length-1); 
+
+}
+
 module.exports = {
-    splitInputLine, isComment
+    splitInputLine, isComment , parseObjectToCSV
 }  
 
 // console.log(splitInputLine('aaa ,bbb,ccc#dddede', ["header1", "header2", "header3"], [',']));
