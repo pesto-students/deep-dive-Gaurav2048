@@ -1,66 +1,47 @@
-const fs = require('fs')
-const readline = require('readline')
+const fs = require('fs');
+const readline = require('readline');
+const request = require('request');
 const { splitInputLine, isComment } = require('./utility')
 
 function Parse(file, {
     separators = null,
     abortOnError = false,
-    isUrl = false,
-    providedHeader = null,
-
+    isRemoteUrl = false,
+    customHeader = null,
+    ignoreHeader = false
 }) {
-    if(!fs.existsSync(file)) throw Error('No file found.')
+    let rl;
 
-    let fileStream  = fs.createReadStream(file)
-    
-    const rl = readline.createInterface({
-        input: fileStream,
-        crlfDelay: Infinity
-    })
-
-    async function toArray() {
-        let arrayOutput = []
-        let errorOutput = []
-        let count = 0
-        for await (const line of rl) {
-            if (!isComment(line)) {
-                const convertedData = splitInputLine(line, null, separators, true)
-                if (convertedData.error) {
-                    if (abortOnError) {
-                        return Promise.reject(`error found on line ${count}`)
-                    } else {
-                        errorOutput.push({
-                            line,
-                            count
-                        })
-                    }
-                } else {
-                    arrayOutput.push(convertedData.data);
-                }
-            }
-            count++;
-        }
-        return {
-            arrayOutput,
-            errorOutput
-        };
+    if (isRemoteUrl) {
+      if (!isValidRemoteURL(isRemoteUrl)) throw new Error('Invalid URL passed.');
+      rl = readline.createInterface({
+        input: request.get(file).on('error', (err) => {
+          throw new Error(err);
+        }),
+      });
+    } else {
+      if(!fs.existsSync(file)) throw new Error('No file found.');
+      let fileStream  = fs.createReadStream(file);
+      rl = readline.createInterface({
+          input: fileStream,
+          crlfDelay: Infinity
+      });
     }
 
     async function toJson() {
-        let arrayOutput = []
-        let errorOutput = []
-        let index = 0
-        let headers
+        let arrayOutput = [];
+        let errorOutput = [];
+        let index = 0;
+        let headers = null;
         for await (const line of rl) {
-            if (index === 0) {
-                providedHeader !== null ? (headers = providedHeader) : (headers = splitInputLine(line, null, separators, true).data)
-                index++
+            if (index === 0 && !ignoreHeader) {
+                customHeader !== null ? (headers = customHeader) : (headers = splitInputLine(line, null, separators, true).data);
+                index++;
             } else {
-                const convertedJsonObject = splitInputLine(line, headers, separators, false)
-                console.log(convertedJsonObject);
+                const convertedJsonObject = splitInputLine(line, headers, separators, ignoreHeader);
                 if (convertedJsonObject.error) {
                     if (abortOnError) {
-                        return Promise.reject(`error found on line ${index}`)
+                        return Promise.reject(`error found on line ${index}, ${convertedJsonObject.errorInfo}`);
                     } else {
                         errorOutput.push({
                             line,
@@ -74,47 +55,64 @@ function Parse(file, {
             }
         }
         return {
-            arrayOutput, errorOutput
+            response: arrayOutput,
+            error: errorOutput
         };
     }
 
-    async function toArrayStream(cb) {
-        if (cb === null) throw new Error(`must need a stream call back `)
-        for await (const line of rl) {
-            const convertedData = splitInputLine(line, null, separators, true)
-            cb({ data: convertedData.data, completed: false })
-        }
-        cb({ data: null, completed: true })
-    }
-
     async function toJsonStream(cb) {
-        if (cb === null) throw new Error(`must need a stream call back `)
-        let index = 0
-        let headers
+        if (cb === null) throw new Error(`must need a stream call back `);
+        let index = 0;
+        let headers;
         for await (const line of rl) {
             if (index === 0) {
-                providedHeader !== null ? (headers = providedHeader) : (headers = splitInputLine(line, null, separators, true).data)
-                index++
+                customHeader !== null ? (headers = customHeader) : (headers = splitInputLine(line, null, separators, true).data);
+                index++;
             } else {
-                const convertedJsonObject = splitInputLine(line, headers, separators, false)
-                cb({ data: convertedJsonObject.data, completed: false })
+                const convertedJsonObject = splitInputLine(line, headers, separators, false);
+                cb({ data: convertedJsonObject.data, completed: false });
             }
-            cb({ data: null, completed: true })
+            cb({ data: null, completed: true });
         }
     }
 
-
     return {
-        toArray,
         toJson,
-        toArrayStream,
         toJsonStream
     }
+}
 
+const isValidRemoteURL = url => {
+  // TODO: Write logic to validate the remote URL
+    return true;
+}
+
+const csvParse = async function(...givenDataAndOptions) {
+  if (givenDataAndOptions.length < 1) {
+    throw new Error(`Expected at least one parameter, found ${arguments.length}`);
+  }
+  let data = givenDataAndOptions[0];
+  let options = givenDataAndOptions[1];
+  if (typeof data !== 'string') {
+    throw new Error(`Expected file name of string type, got ${typeof data}`);
+  }
+  if (givenDataAndOptions.length === 2) {
+    if (typeof options !== 'object') {
+      throw new Error(`Expected Options parameter of object type, got ${typeof options}`);
+    }
+    if (Array.isArray(options)) {
+      throw new Error(`Expected Options parameter of object type, got an array`);
+    }
+  } else if (givenDataAndOptions.length === 1) {
+    options = {};
+  }
+
+  const parseObj = new Parse(data, options);
+  const result = await parseObj.toJson();
+  return result;
 }
 
 
-
 module.exports = {
-    Parse
+    csvParse
 }

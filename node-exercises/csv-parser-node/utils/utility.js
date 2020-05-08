@@ -2,61 +2,65 @@ const splitInputLine = (
     line, // line to be split
     header = null , // header items (for creating json object)
     seperators = null, // seperator array to find valid seperators
-    returnArray = false //  
+    returnArray = false //
 ) => {
-    if(line.trim() === "" || typeof line !== "string"){
-        return {data: null , error: true}
+    let isError = false;
+    let errorMsg = '';
+    if (line.trim() === "" || typeof line !== "string") {
+      isError = true;
+      errorMsg = `Expected line of CSV of string type, got ${typeof line}`;
     }
-    if(returnArray === false && header === null ) return {data:null, error: true}
 
-    let splitRegex  
-    if(seperators === null || seperators.length === 0){
-        splitRegex = ","; 
-    }else{
-        // assuming space for no separator provided. 
-        splitRegex = seperators.join("")
+    let splitRegex, joinedSeparator;
+    if (seperators === null || seperators.length === 0) {
+        splitRegex = ",";
+    } else {
+        splitRegex = seperators.join("");  // assuming space for no separator provided.
+        splitRegex = splitRegex.concat(','); // if custom separator is provided then no need to take "," by user
     }
-    
+    let regExp = new RegExp("[" + splitRegex + "]+", "g");
     // removing commented part from line if any
-    var commentPosition = line.indexOf("#"); 
-    if(commentPosition !== -1){
+    var commentPosition = line.indexOf("#");
+    if (commentPosition !== -1) {
         line = line.substring(0,commentPosition);
     }
 
-    const splittedArray = line.split(new RegExp(splitRegex))
-    if(returnArray === true){
+    const splittedArray = regExp[Symbol.split](line);
+
+    if (header !== null && (header.length !== splittedArray.length)) {
+      isError = true;
+      errorMsg = 'Provided CSV format is invalid. All rows in CSV must have the same number of fields as the provided header has';
+    }
+
+    if (isError) return { data: null , error: true, errorInfo: errorMsg };
+
+    if (returnArray === true) {
         // return an array
-        return {data:splittedArray, error: false}; 
-    }else{
-        const splittedArray = line.split(new RegExp(splitRegex))
-        let seperatedObject  = {}
-        for(const index in header){
-            seperatedObject[header[index]] = splittedArray[index]
+        return { data: splittedArray, error: false };
+    } else {
+        const splittedArray = regExp[Symbol.split](line);
+        let seperatedObject  = {};
+        for (const index in header) {
+            seperatedObject[header[index]] = splittedArray[index];
         }
-        return { data: seperatedObject, error: false }; 
+        return { data: seperatedObject, error: false };
     }
 }
 
-const isComment = line =>{
-    if(line[0]==="#"){
-        return true
-    }
-    return false; 
+const isComment = line => {
+    return line[0] === "#";
 }
 
-const parseObjectToCSV = obj =>{
+const parseObjectToCSV = obj => {
     let csvString = ""
-
-    for(const el of Object.keys(obj)){
-        csvString = csvString + obj[el] +","
+    for (const el of Object.keys(obj)) {
+        csvString = csvString + obj[el] + ","
     }
-
-    return csvString.substring(0, csvString.length-1); 
-
+    return csvString.substring(0, csvString.length - 1);
 }
 
 module.exports = {
     splitInputLine, isComment , parseObjectToCSV
-}  
+}
 
 // console.log(splitInputLine('aaa ,bbb,ccc#dddede', ["header1", "header2", "header3"], [',']));
