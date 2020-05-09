@@ -78,11 +78,11 @@ function Parse(file, {
           completed: false
         });
       }
-      cb({
-        data: null,
-        completed: true
-      });
     }
+    cb({
+      data: null,
+      completed: true
+    });
   }
 
   return {
