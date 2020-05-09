@@ -1,3 +1,5 @@
+const { Parse, Unparse } = require('./utils');
+
 const Parse = require('./utils/Parse');
 
 console.log(__dirname);
