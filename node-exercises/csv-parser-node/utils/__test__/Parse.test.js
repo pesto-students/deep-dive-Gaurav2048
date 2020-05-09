@@ -28,4 +28,62 @@ describe('Parse', () => {
     })
   })
 
+  it('should should accept custom headers.', async ()=>{
+     const customHeader = ["title_1", "title_2", "title_3"]; 
+   await Parse.csvParse(__dirname+'/input.txt', {
+      customHeader
+   }).then(res=>{      
+      const obj = res.response[0]
+      const receivedHeaders = Object.keys(obj)
+      let header_matching = true
+      for(const index in receivedHeaders){
+         if(receivedHeaders[index]!==customHeader[index]){
+            header_matching = false
+            break
+         }
+      }
+      expect(header_matching).toBe(true)
+   })
+ })
+
+ it('should abort on first error', async ()=>{
+  const p = await Parse.csvParse(__dirname+'/err.txt', {
+      abortOnError: true
+   }).then(res=>{
+     
+   }).catch(er=>{
+
+   })
+ })
+
+ it('should skip whenever error occurs.', async ()=>{
+   await Parse.csvParse(__dirname+'/err.txt', {
+       abortOnError: false
+    }).then(res=>{
+      expect(res.error.length).toBe(1)
+      expect(res.response.length).toBe(2)
+    })
+  })
+
+  it('should skip comments.', async ()=>{
+   await Parse.csvParse(__dirname+'/commet.txt', {
+       abortOnError: false
+    }).then(res=>{       
+      expect(res.error.length).toBe(2)
+      expect(res.response.length).toBe(2)
+    })
+  })
+
+  it('Should accept custom separators.', async ()=>{
+   await Parse.csvParse(__dirname+'/sep.txt', {
+       abortOnError: false, 
+       separators : ['.','-','!']
+    }).then(res=>{       
+       console.log(res);
+      expect(res.error.length).toBe(2)
+      expect(res.response.length).toBe(2)
+    })
+  })
+
+
 });
