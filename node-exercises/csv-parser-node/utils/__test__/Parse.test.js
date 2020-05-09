@@ -11,20 +11,15 @@ describe('Parse', () => {
   });
 
   it('should give a 2D array of csv file', async ()=>{
-    await Parse.csvParse(__dirname+'/input.txt', {}).then(res=>{
-        expect(res.arrayOutput).to.have.length(3)
-        expect(res.arrayOutput[0]).to.have.length(3)
-    }).catch(er=>{
-  
-    })
+    await Parse.csvParse(__dirname+'/input.txt', {}).then(res=>{       
+        expect(res.response).toHaveLength(2)
+    }) 
   })
  
   it('should give a json object of csv file', async ()=>{
     await Parse.csvParse(__dirname+'/input.txt', {}).then(res=>{
         expect(res.response[0].field_2).toBe('bbb')
-        expect(res.arrayOutput).to.have.length(2)
-    }).catch(er=>{
-  
+        expect(res.response).toHaveLength(2)
     })
   })
 
@@ -79,11 +74,28 @@ describe('Parse', () => {
        abortOnError: false, 
        separators : ['.','-','!']
     }).then(res=>{       
-       console.log(res);
       expect(res.error.length).toBe(2)
       expect(res.response.length).toBe(2)
     })
   })
 
+  it('should provide a stream extension.', async ()=>{
+   let sum = 0
+    await Parse.csvParseStream(__dirname+'/stream.txt', {} , function (item) {
+      if(!item.completed){
+         sum += parseInt(item.data.field_1.trim())
+      }else {
+          expect(sum).toBe(277) 
+      }
+    })
+  })
+  
+  it('should fetch remote csv and parse to JSON.', async ()=>{
+   const p = await Parse.csvParse('https://algorithm-visualizer-am.netlify.app/test.csv', {
+      isRemoteUrl:true
+    }).then(res=>{
+      expect(res.response.length).toBe(154)
+    })
+  })
 
 });
