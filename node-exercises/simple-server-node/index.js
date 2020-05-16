@@ -33,7 +33,14 @@ const BAuth = (req, res, next) =>{
 }
 
 Impress.get('/one/:id', auth, secondaryAuth, TAuth, BAuth,  function (req, res) {
-    res.send(200, "method executed")
+    res.send(200, JSON.stringify(req.body))
+    console.log('one');
+
+})
+
+Impress.get('/login', auth, secondaryAuth, TAuth, BAuth,  function (req, res) {
+    //res.send(200, "method executed")
+    res.send(200,"node-exercises/simple-server-node/pages/login.html")
     console.log('one');
 
 })
