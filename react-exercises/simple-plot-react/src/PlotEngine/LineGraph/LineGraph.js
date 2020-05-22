@@ -11,6 +11,8 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
     const ref = React.useRef(null)
 
     React.useEffect(() => {
+        console.log('bars updated');
+        
         const canvas = ref.current
         const ctx = canvas.getContext('2d')
         ctx.clearRect(0, 0, canvas.width, canvas.height)
