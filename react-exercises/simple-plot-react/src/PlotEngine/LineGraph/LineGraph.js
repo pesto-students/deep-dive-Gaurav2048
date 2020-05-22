@@ -11,8 +11,11 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
     const ref = React.useRef(null)
 
     React.useEffect(() => {
+        console.log('bars updated');
+        
         const canvas = ref.current
         const ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         const {max, min} = getMaxMin(y_data)
 
@@ -80,10 +83,8 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 0.1
         ctx.stroke();
-
-        // draw line 
         
-    }, [])
+    }, [horizontal_segments])
 
     const drawGraph = (y_axis, color) => {
         
@@ -140,6 +141,20 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
         return {max, min}
     }
 
+    const updateHorizontalBars = () =>{
+        const {max, min} = getMaxMin(y_data)
+
+        let calc_horizontal_segments = 0;
+
+        if (max > min) {
+            calc_horizontal_segments = (max / 50 + 1) * 2
+        } else {
+            calc_horizontal_segments = (min / 50 + 1) * 2;
+        }
+        set(calc_horizontal_segments)
+    }
+
+
     const drawCircle = (y_axis, color) => {
 
         const canvas = ref.current
@@ -152,8 +167,8 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
                 var centerX = i * (canvas.width / y_length);
                 var centerY = canvas.height / 2 - (y_axis[i - 1] / 50) * (canvas.height / horizontal_segments);
             } else {
-                var centerX = i * (canvas.width / y_length);
-                var centerY = canvas.height / 2 + (y_axis[i - 1] / 50) * -1 * (canvas.height / horizontal_segments);
+                centerX = i * (canvas.width / y_length);
+                centerY = canvas.height / 2 + (y_axis[i - 1] / 50) * -1 * (canvas.height / horizontal_segments);
             }
             p_array.push({
                 x: centerX,
@@ -172,13 +187,13 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
     }
 
     React.useEffect(() => {
-
+        updateHorizontalBars()
         for(let i = 0 ; i<y_data.length ; i++){
             drawGraph(y_data[i], colors[i])
             drawCircle(y_data[i], colors[i])   
         }
 
-    }, [horizontal_segments])
+    }, [horizontal_segments, y_data])
 
     const findGraphPoints = e => {
 
@@ -186,20 +201,16 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
         let rect = canvas.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let y = (e.clientY - rect.top);
-        console.log(x, y);
-        console.log(point_array);
 
          for(let i = 0; i<point_array.length; i++){
             var point = point_array[i]
             var x_boundary = [point.x - 8, point.x + 8];
             var y_boundary = [point.y - 8, point.x + 8];
            
-
             if ((x >= x_boundary[0] && x <= x_boundary[1])
                 &&
                 (y >= y_boundary[0] && y <= y_boundary[1])
             ) {
-                console.log('point found');
                 const newPoint = {...point, dispX: e.clientX, dispY: e.clientY , show: true  }
                 setPoint(newPoint)
                 break; 
@@ -207,34 +218,19 @@ const LineGraph = ({ y_data, x_axis , colors , ...props }) => {
         };
     }
 
-
-
-    const removeToolTip = e => {
-        console.log('mouse left');
-        
-    }
-
     return <>
         <canvas ref={ref}
             width={window.innerWidth / 1.5}
             height={window.innerHeight / 1.5}
             onMouseDown={(e) => findGraphPoints(e)}
-            onMouseLeave={(e) => removeToolTip(e)}
             style={{
                 border: "2px #AAAAAA solid",
                 overflow: "hidden",
                 marginTop: "20px"
             }}
         />
-
-        {
-            <Tooltip point = {point} />
-        }
-
-        {
-            props.children
-        }
-
+        { <Tooltip point = {point} /> }
+        { props.children }
     </>
 }
 
