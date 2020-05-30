@@ -17,11 +17,31 @@ const Model = (schema) => {
     }
   };
 
-  const find = (obj) => {};
+  const find = (obj) => {
+    if (validateObjectWithSchema(obj, schema.obj)) {
+      return connectionInstance
+        .then((db) => {
+          return db.collection(schema.schemaName).find(obj);
+        })
+        .catch((err) => {
+          throw Error(err);
+        });
+    }
+  };
 
-  const findOne = (obj) => {};
+  const findOne = (obj) => {
+    if (validateObjectWithSchema(obj, schema.obj)) {
+      return connectionInstance
+        .then((db) => {
+          return db.collection(schema.schemaName).findOne(obj);
+        })
+        .catch((err) => {
+          throw Error(err);
+        });
+    }
+  };
 
-  return { create };
+  return { create ,find,findOne };
 };
 
 const validateObjectWithSchema = (obj, schema) => {
